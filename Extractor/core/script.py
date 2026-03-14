@@ -10,7 +10,7 @@ START_TXT = """
 **<blockquote>जीवन में शांति चाहते हैं तो दुसरों की शिकायतें करने से बेहतर है खुद को बदल लें।
 क्योंकि पुरी दुनिया में कारपेट बिछाने से खुद के पैरों में चप्पल पहन लेना अधिक सरल है।</blockquote>**
 
-**<blockquote>🌿 ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ : <a href="https://t.me/ITsGOLU_OFFICIAL">𝐈𝐓'𝐬𝐆𝐎𝐋𝐔 🫠</a></blockquote>**
+**<blockquote>🌿 ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ : <a href="https://t.me/RixieHQ">𝙂𝙃𝙊𝙎𝙏•𝙍𝙄𝙓 👻</a></blockquote>**
 """
 
 FORCE_MSG = """
@@ -20,7 +20,7 @@ FORCE_MSG = """
 
 **<blockquote>ᴀᴄᴄᴏʀᴅɪɴɢ ᴛᴏ ᴍʏ ᴅᴀᴛᴀʙᴀsᴇ ʏᴏᴜ'ᴠᴇ ɴᴏᴛ ᴊᴏɪɴᴇᴅ ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ ʏᴇᴛ, ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴜsᴇ ᴍᴇ ᴛʜᴇɴ ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ ᴀɴᴅ sᴛᴀʀᴛ ᴍᴇ ᴀɢᴀɪɴ !</blockquote>**
 
-**<blockquote>🌿 ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ : <a href="https://t.me/ITsGOLU_OFFICIAL">𝐈𝐓'𝐬𝐆𝐎𝐋𝐔 🫠</a></blockquote>**
+**<blockquote>🌿 ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ : <a href="https://t.me/RixieHQ">𝙂𝙃𝙊𝙎𝙏•𝙍𝙄𝙓 👻</a></blockquote>**
 """
 
 MODES_TXT = """
@@ -47,7 +47,7 @@ PLANS_TXT = """
 <b><blockquote>ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ᴛʜᴇ ᴇxᴄʟᴜsɪᴠᴇ ᴘʀᴇᴍɪᴜᴍ sᴇᴄᴛɪᴏɴ, ᴡʜᴇʀᴇ ʏᴏᴜ'ʟʟ ғɪɴᴅ ᴄᴜʀᴀᴛᴇᴅ ɪɴsɪɢʜᴛs ᴀɴᴅ ᴇxᴘᴇʀɪᴇɴᴄᴇs ᴛᴀɪʟᴏʀᴇᴅ ᴛᴏ ᴛʜᴏsᴇ sᴇᴇᴋɪɴɢ ᴛᴏᴘ-ᴛɪᴇʀ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ᴀɴᴅ sᴇʀᴠɪᴄᴇs.</blockquote>
 
 <blockquote>‼️ ᴀғᴛᴇʀ sᴇɴᴅɪɴɢ ᴀ sᴄʀᴇᴇɴsʜᴏᴛ ᴘʟᴇᴀsᴇ ɢɪᴠᴇ ᴜs sᴏᴍᴇ ᴛɪᴍᴇ ᴛᴏ ᴀᴅᴅ ʏᴏᴜ ɪɴ ᴛʜᴇ ᴘʀᴇᴍɪᴜᴍ ʟɪsᴛ.</blockquote></b>
-**<blockquote>🌿 ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ : <a href="https://t.me/ITsGOLU_OFFICIAL">𝐈𝐓'𝐬𝐆𝐎𝐋𝐔 🫠</a></blockquote>**
+**<blockquote>🌿 ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ : <a href="https://t.me/RixieHQ">𝙂𝙃𝙊𝙎𝙏•𝙍𝙄𝙓 👻</a></blockquote>**
 """
 
     
