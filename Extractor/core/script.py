@@ -8,8 +8,8 @@ START_TXT = """
 **ʜᴇʟʟᴏ** {},
 
 **<blockquote>
-Access granted...  
-System compromised...  You are now inside GHOST 👻
+Welcome to the realm of GHOST...
+Enter silently, leave no trace.
 </blockquote>**
 **<blockquote>🌿 ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ : <a href="https://t.me/RixieHQ">𝙂𝙃𝙊𝙎𝙏•𝙍𝙄𝙓 👻</a></blockquote>**
 """
