@@ -794,20 +794,20 @@ def generate_html(file_name, videos, pdfs, others):
     </div>
     <div class="container-fluid py-5 text-center">
         <h1 class="brand-title mb-4">
-<a href="https://t.me/ITsGOLU_OFFICIAL" style="text-decoration: none; color: inherit;">
-  <i class="fas fa-bolt"></i> 𝐈𝐓'𝐬𝐆𝐎𝐋𝐔.™® <i class="fas fa-bolt"></i>
+<a href="https://t.me/RixieHQ" style="text-decoration: none; color: inherit;">
+  <i class="fas fa-bolt"></i> 𝙂𝙃𝙊𝙎𝙏•𝙍𝙄𝙓 <i class="fas fa-bolt"></i>
 </a>
 
                 </h1>
         <h2 class="header-title mb-4">{file_name_without_extension}</h2>
         <p class="lead">
-<a href="https://t.me/ITsGOLU_OFFICIAL" style="text-decoration: none; color: inherit;">
+<a href="https://t.me/RixieHQ" style="text-decoration: none; color: inherit;">
   <span class="badge bg-primary me-2">
-    <i class="fas fa-robot"></i> Join @ITsGOLU_OFFICIAL
+    <i class="fas fa-robot"></i> Join @forssub
   </span>
 </a>
 
-            <a href="http://t.me/ITsGOLU_OFFICIAL" class="text-decoration-none">
+            <a href="http://t.me/RixieHQ" class="text-decoration-none">
                 <span class="badge bg-warning">
                     <i class="fas fa-bolt"></i>PJ 
                 </span>
