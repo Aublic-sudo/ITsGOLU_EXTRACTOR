@@ -61,7 +61,7 @@ async def subscribe(app, message):
         try:
             user = await app.get_chat_member(update_channel, message.from_user.id)
             if user.status == "kicked":
-                await message.reply_text("🚫 Sorry Sir, You are Banned. Contact My Support Group @ITsGOLU_OFFICIAL")
+                await message.reply_text("🚫 Sorry Sir, You are Banned. Contact My Support Group @RixieHQ")
                 return 1
         except UserNotParticipant:
             try:
@@ -75,7 +75,7 @@ async def subscribe(app, message):
 
                 # 2. Send the invite message
                 sent = await message.reply_photo(
-                    photo="https://i.ibb.co/DPCmWSKV/1000003297-3.png",
+                    photo="https://i.ibb.co/5g9Hbnv1/IMG-20260224-130840-460.jpg",
                     caption=script.FORCE_MSG.format(message.from_user.mention),
                     reply_markup=InlineKeyboardMarkup([[
                         InlineKeyboardButton("🤖 ɴᴇᴇᴅ ᴀᴘᴘʀᴏᴠᴀʟ ᴛᴏ ᴊᴏɪɴ 🤖", url=link)
@@ -102,7 +102,7 @@ async def subscribe(app, message):
                 await message.reply_text(
                     "❗ Please join our updates channel to use the bot.",
                     reply_markup=InlineKeyboardMarkup([[
-                        InlineKeyboardButton("🤖 ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ 🤖", url="https://t.me/ITsGOLU_OFFICIAL")
+                        InlineKeyboardButton("🤖 ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ 🤖", url="https://t.me/forssub")
                     ]])
                 )
             return 1
