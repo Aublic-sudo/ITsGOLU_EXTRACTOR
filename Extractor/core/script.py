@@ -7,9 +7,10 @@ from config import ADMIN_BOT_USERNAME
 START_TXT = """
 **ʜᴇʟʟᴏ** {},
 
-**<blockquote>जीवन में शांति चाहते हैं तो दुसरों की शिकायतें करने से बेहतर है खुद को बदल लें।
-क्योंकि पुरी दुनिया में कारपेट बिछाने से खुद के पैरों में चप्पल पहन लेना अधिक सरल है।</blockquote>**
-
+**<blockquote>
+Access granted...  
+System compromised...  You are now inside GHOST 👻
+</blockquote>**
 **<blockquote>🌿 ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ : <a href="https://t.me/RixieHQ">𝙂𝙃𝙊𝙎𝙏•𝙍𝙄𝙓 👻</a></blockquote>**
 """
 
