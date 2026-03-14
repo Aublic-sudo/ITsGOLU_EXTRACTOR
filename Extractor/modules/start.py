@@ -41,7 +41,7 @@ from Extractor.modules.enc import *
 from Extractor.modules.freecp import *
 from Extractor.modules.freeappx import *
 from Extractor.modules.freepw import *
-from Extractor.modules.cds import handle_cds_callback
+#from Extractor.modules.cds import handle_cds_callback
 
 from Extractor.core.mongo import plans_db
 from telegram import Update
