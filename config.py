@@ -10,7 +10,7 @@ API_HASH = os.environ.get("API_HASH","")
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
 # ------------------------------------------------
 BOT_USERNAME = os.environ.get("BOT_USERNAME", "")
-BOT_TEXT = ""
+BOT_TEXT = "𝙂𝙃𝙊𝙎𝙏•𝙍𝙄𝙓"
 # ------------------------------------------------
 OWNER_ID = int(os.environ.get("OWNER_ID", ""))
 # ------------------------------------------------
@@ -32,7 +32,7 @@ UNSPLASH_QUERY = 'animal baby'
 # -----------------------------------------------
 ADMIN_BOT_USERNAME = "" #without @
 
-THUMB_URL = os.environ.get("THUMB_URL", "")
+THUMB_URL = os.environ.get("THUMB_URL", "https://i.ibb.co/5g9Hbnv1/IMG-20260224-130840-460.jpg")
 
 
 
