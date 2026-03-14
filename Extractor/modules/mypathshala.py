@@ -206,7 +206,7 @@ async def my_pathshala_login(app, message):
                                 f"📊 𝗙𝗶𝗻𝗮𝗹 𝗦𝘁𝗮𝘁𝘂𝘀:\n"
                                 f"📚 Processed: {cname}\n"
                                 f"📤 File has been uploaded\n\n"
-                                f"Thank you for using -:𝐈𝐓'𝐬𝐆𝐎𝐋𝐔.™®:-🌟"
+                                f"Thank you for using -:𝙂𝙃𝙊𝙎𝙏•𝙍𝙄𝙓:-🌟"
                             )
 
                         except Exception as e:
