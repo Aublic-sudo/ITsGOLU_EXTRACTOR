@@ -15,14 +15,14 @@ BOT_TEXT = "𝙂𝙃𝙊𝙎𝙏•𝙍𝙄𝙓"
 OWNER_ID = int(os.environ.get("OWNER_ID", ""))
 # ------------------------------------------------
 # //LOG CHANNEL ID 
-CHANNEL_ID = int(os.environ.get("CHANNEL_ID", ""))
+CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1003675139654"))
 
 # //FORCE_CHANNEL_ID
-CHANNEL_ID2 = int(os.environ.get("CHANNEL_ID2", "")) 
+CHANNEL_ID2 = int(os.environ.get("CHANNEL_ID2", "-1003675139654")) 
 # ------------------------------------------------
 MONGO_URL = os.environ.get("MONGO_URL", "")
 # -----------------------------------------------
-PREMIUM_LOGS = int(os.environ.get("PREMIUM_LOGS", ""))
+PREMIUM_LOGS = int(os.environ.get("PREMIUM_LOGS", "-1003675139654"))
 # -----------------------------------------------
 join = '<a href="">✳️ JOIN BACKUP</a>'
 # -----------------------------------------------
@@ -30,7 +30,7 @@ UNSPLASH_ACCESS_KEY = 'RabDRmuXXBobanmwwbvpP5LwoG4J8ox34y5Sstz-kk'
 # -----------------------------------------------
 UNSPLASH_QUERY = 'animal baby'
 # -----------------------------------------------
-ADMIN_BOT_USERNAME = "" #without @
+ADMIN_BOT_USERNAME = "extractr69_bot" #without @
 
 THUMB_URL = os.environ.get("THUMB_URL", "https://i.ibb.co/5g9Hbnv1/IMG-20260224-130840-460.jpg")
 
