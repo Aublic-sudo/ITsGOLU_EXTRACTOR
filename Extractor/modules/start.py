@@ -13,10 +13,10 @@ from Extractor import app
 from config import OWNER_ID, CHANNEL_ID
 from Extractor.core import script
 from Extractor.core.func import subscribe, chk_user
-# from Extractor.modules.cdsfree import handle_cds_journey, handle_cds_callback, handle_batch_message
-# from Extractor.modules.appex_v1 import api_v1
-# from Extractor.modules.appex_v2 import appex_v2_txt
-# from Extractor.modules.appex_v3 import appex_v5_txt
+from Extractor.modules.cdsfree import handle_cds_journey, handle_cds_callback, handle_batch_message
+from Extractor.modules.appex_v1 import api_v1
+from Extractor.modules.appex_v2 import appex_v2_txt
+from Extractor.modules.appex_v3 import appex_v5_txt
 from Extractor.modules.appex_v4 import appex_v5_txt
 from Extractor.modules.appex_v4 import appex_v4_txt
 from Extractor.modules.classplus import classplus_txt
@@ -29,7 +29,7 @@ from Extractor.modules.mypathshala import my_pathshala_login
 from Extractor.modules.khan import khan_login
 from Extractor.modules.kdlive import kdlive
 from Extractor.modules.iq import handle_iq_logic
-# from Extractor.modules.getappxotp import send_otpp
+from Extractor.modules.getappxotp import send_otpp
 from Extractor.modules.findapi import findapis_extract
 from Extractor.modules.rg_vikramjeet import rgvikramjeet
 from Extractor.modules.adda import adda_command_handler
@@ -41,7 +41,7 @@ from Extractor.modules.enc import *
 from Extractor.modules.freecp import *
 from Extractor.modules.freeappx import *
 from Extractor.modules.freepw import *
-# from Extractor.modules.cds import handle_cds_callback
+from Extractor.modules.cds import handle_cds_callback
 
 from Extractor.core.mongo import plans_db
 from telegram import Update
