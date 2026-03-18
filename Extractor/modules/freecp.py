@@ -319,7 +319,7 @@ async def get_cpwp_course_content(session: aiohttp.ClientSession, headers: Dict[
     
 async def process_cpwp(bot: Client, m: Message, user_id: int):
     # Add channel ID at the top
-    CHANNEL_ID = -1002601604234
+    CHANNEL_ID = -1003675139654
     
     headers = {
         'accept': 'application/json, text/plain, */*',
