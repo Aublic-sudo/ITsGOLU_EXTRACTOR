@@ -1,3 +1,4 @@
+
 import requests, os, sys, re
 import json, asyncio
 import subprocess
@@ -210,14 +211,30 @@ async def get_cpwp_course_content(session: aiohttp.ClientSession, headers: Dict[
                                "testbook.com" in url_val)
                     
                     if is_video and url_val not in fetched_urls:
-                        fetched_urls.add(url_val)
-                        headers2 = { 'x-access-token': 'eyJjb3Vyc2VJZCI6IjQ1NjY4NyIsInR1dG9ySWQiOm51bGwsIm9yZ0lkIjo0ODA2MTksImNhdGVnb3J5SWQiOm51bGx9'}
-                        # Add indentation and video icon
-                        indent = "  " * level
-                        formatted_name = f"{indent}🎬 {name}"
-                        task = asyncio.create_task(process_cpwp_url(url_val, formatted_name, session, headers2))
-                        content_tasks.append((content['id'], task))
-                        video_count += 1
+                       fetched_urls.add(url_val)
+                   
+                       indent = "  " * level
+                       formatted_name = f"{indent}🎬 {name}"
+                   
+                       async def handle_video(url_copy):
+                           try:
+                               final_url = url_copy  # default original
+                   
+                               # 🔥 SIGNED URL LOGIC
+                               if "classplusapp.com" in url_copy and not url_copy.endswith(".m3u8"):
+                                   signed = await fetch_cpwp_signed_url(url_copy, formatted_name, session, headers)
+                                   if signed:
+                                       final_url = signed
+                   
+                               return f"{formatted_name}:{final_url}\n"
+                   
+                           except Exception as e:
+                               logging.error(f"Signed URL error: {e}")
+                               return f"{formatted_name}:{url_copy}\n"
+                   
+                       task = asyncio.create_task(handle_video(url_val))
+                       content_tasks.append((content['id'], task))
+                       video_count += 1
                     else:
                         if url_val:
                             fetched_urls.add(url_val)
@@ -340,7 +357,7 @@ async def process_cpwp(bot: Client, m: Message, user_id: int):
     }
 
     loop = asyncio.get_event_loop()
-    CONNECTOR = aiohttp.TCPConnector(limit=1000, loop=loop)
+    CONNECTOR = aiohttp.TCPConnector(limit=50)
     async with aiohttp.ClientSession(connector=CONNECTOR, loop=loop) as session:
         editable = None
         try:
