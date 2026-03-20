@@ -388,7 +388,7 @@ async def process_cpwp(bot: Client, m: Message, user_id: int):
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
                 'Accept-Encoding': 'gzip, deflate, br, zstd',
                 'Accept-Language': 'en-US,en;q=0.9',
-                'Referer': 'https://qsvfn.courses.store/?mainCategory=0&subCatList=[130504,62442]',
+                'Referer': 'https://mpeqp.courses.store/?mainCategory=0&subCatList=[130504,62442]',
                 'Sec-CH-UA': '"Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"',
                 'Sec-CH-UA-Mobile': '?0',
                 'Sec-CH-UA-Platform': '"Windows"',
