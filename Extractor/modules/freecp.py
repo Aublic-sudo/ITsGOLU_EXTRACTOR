@@ -221,7 +221,7 @@ async def get_cpwp_course_content(session: aiohttp.ClientSession, headers: Dict[
                                final_url = url_copy  # default original
                    
                                # 🔥 SIGNED URL LOGIC
-                               if "classplusapp.com" in url_copy and not url_copy.endswith(".m3u8"):
+                               if "classplusapp.com" in url_copy:
                                    signed = await fetch_cpwp_signed_url(url_copy, formatted_name, session, headers)
                                    if signed:
                                        final_url = signed
