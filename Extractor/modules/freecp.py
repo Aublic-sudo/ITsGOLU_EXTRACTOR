@@ -353,8 +353,7 @@ async def process_cpwp(bot: Client, m: Message, user_id: int):
         'region': 'IN',
         'user-agent': 'Mobile-Android',
         'webengage-luid': '00000187-6fe4-5d41-a530-26186858be4c',
-        'x-access-token': 'eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIyMDc4ODg0LCJvcmdJZCI6NzExNTI4LCJ0eXBlIjoxLCJtb2JpbGUiOiI5MTg2MDAzOTAyODgiLCJuYW1lIjoiU2Fua2V0IFNvbmFyIiwiZW1haWwiOiJoanMuc2Fua2V0QGdtYWlsLmNvbSIsImlzSW50ZXJuYXRpb25hbCI6MCwiZGVmYXVsdExhbmd1YWdlIjoiRU4iLCJjb3VudHJ5Q29kZSI6IklOIiwiY291bnRyeUlTTyI6IjkxIiwidGltZXpvbmUiOiJHTVQrNTozMCIsImlzRGl5Ijp0cnVlLCJvcmdDb2RlIjoidWphbGFmIiwiaXNEaXlTdWJhZG1pbiI6MCwiZmluZ2VycHJpbnRJZCI6IjE3MjAxMDU1NjkwMjYiLCJpYXQiOjE3NDkyNTUzOTUsImV4cCI6MTc0OTg2MDE5NX0.uKdyXfFDtcdyaUItjc_G1ALYwtKxVyuG_SnPhRPa2cNy9Tzd0TaXdXNw1d2cUurv'
-    }
+        'x-access-token': 'eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJpZCI6MTc1NzUyNjYwLCJvcmdJZCI6MzYwMTAwLCJ0eXBlIjoxLCJtb2JpbGUiOiI5MTYzNTU5NTI1ODkiLCJuYW1lIjoiVW5rbm93biIsImVtYWlsIjpudWxsLCJpc0ludGVybmF0aW9uYWwiOjAsImRlZmF1bHRMYW5ndWFnZSI6IkVOIiwiY291bnRyeUNvZGUiOiJJTiIsImNvdW50cnlJU08iOiI5MSIsInRpbWV6b25lIjoiR01UKzU6MzAiLCJpc0RpeSI6dHJ1ZSwib3JnQ29kZSI6Im1wZXFwIiwiaXNEaXlTdWJhZG1pbiI6MCwiZmluZ2VycHJpbnRJZCI6IjQwNjlhMTJhYzY3ZTRiZTlhNzNkOTY4NWFkZGM5YTgzIiwiaWF0IjoxNzczOTk5MDkwLCJleHAiOjE3NzQ2MDM4OTB9.jTZHR3OV_Jz9sC65-GeQ2L0hIQU4buTLNnz5L7U3Gi93DemI2wv1jDZ2gpE-5rMU'}
 
     loop = asyncio.get_event_loop()
     CONNECTOR = aiohttp.TCPConnector(limit=50)
