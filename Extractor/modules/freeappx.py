@@ -514,21 +514,7 @@ async def process_appxwp(bot: Client, m: Message, user_id: int):
 
             
                 
-            headers = {
-                'User-Agent': 'okhttp/4.9.1',
-                'Accept-Encoding': 'gzip',
-                'client-service': 'Appx',
-                'auth-key': 'appxapi',
-                'user_app_category': '',
-                'language': 'en',
-                'device_type': 'ANDROID',
-                'Authorization': token,
-                'User-ID': userid,
-                'source': 'website',
-                'Referer': api + '/',
-                'Origin': api,
-                'Host': api.replace('https://', '').replace('http://', '').replace('/', '')
-            }
+            
             await editable.edit(
                 "Send Authorization Token\n\n"
                 "Example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
@@ -540,34 +526,47 @@ async def process_appxwp(bot: Client, m: Message, user_id: int):
                     filters=filters.user(user_id),
                     timeout=180
                 )
+            
                 token = token_input.text.strip()
-                
-                try:
-                    # JWT ka second part payload hota hai
-                    payload = token.split('.')[1]
-                
-                    # base64 padding fix
-                    payload += '=' * (-len(payload) % 4)
-                
-                    decoded_payload = json.loads(
-                        base64.urlsafe_b64decode(payload).decode('utf-8')
-                    )
-                
-                    print(decoded_payload)
-                
-                    userid = str(
-                        decoded_payload.get("id") or
-                        decoded_payload.get("user_id") or
-                        decoded_payload.get("userid")
-                    )
-                
-                    print(userid)
-                
-                except Exception as e:
-                    print("Token decode error:", e)
+            
+                # JWT payload decode
+                payload = token.split('.')[1]
+                payload += '=' * (-len(payload) % 4)
+            
+                decoded_payload = json.loads(
+                    base64.urlsafe_b64decode(payload).decode('utf-8')
+                )
+            
+                userid = str(
+                    decoded_payload.get("id") or
+                    decoded_payload.get("user_id") or
+                    decoded_payload.get("userid") or
+                    decoded_payload.get("sub")
+                )
+            
+                if not userid or userid == "None":
+                    raise Exception("User-ID token me nahi mila")
+            
+                headers = {
+                    'User-Agent': 'okhttp/4.9.1',
+                    'Accept-Encoding': 'gzip',
+                    'client-service': 'Appx',
+                    'auth-key': 'appxapi',
+                    'user_app_category': '',
+                    'language': 'en',
+                    'device_type': 'ANDROID',
+                    'Authorization': token,
+                    'User-ID': userid,
+                    'source': 'website',
+                    'Referer': api + '/',
+                    'Origin': api,
+                    'Host': api.replace('https://', '').replace('http://', '').replace('/', '')
+                }
+            
                 await token_input.delete(True)
-            except:
-                await editable.edit("Timeout! Token nahi bheja")
+            
+            except Exception as e:
+                await editable.edit(f"Invalid Token\n\n{e}")
                 return
             await editable.edit("Fetching courses list...")
             
@@ -661,7 +660,10 @@ async def process_appxwp(bot: Client, m: Message, user_id: int):
                     "Auth-Key": "appxapi",
                     "source": "website",
                     "Authorization": token,
-                    "User-ID": userid
+                    "User-ID": userid,
+                    "Referer": api + '/',
+                    "Origin": api,
+                    "Host": api.replace('https://', '').replace('http://', '').replace('/', '')
                 }
 
                 all_outputs = []
