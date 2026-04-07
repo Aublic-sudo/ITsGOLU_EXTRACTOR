@@ -555,33 +555,24 @@ async def process_appxwp(bot: Client, m: Message, user_id: int):
             header_variants = [
                 {
                     'Referer': 'https://player-strict.akamai.net.in/',
-                    'Origin': 'https://player-strict.akamai.net.in',
-                    'Host': 'akamai.net.in'
+                    'Origin': 'https://player-strict.akamai.net.in'
+                    
                 },
                 {
                     'Referer': 'https://classx.co.in/',
-                    'Origin': 'https://classx.co.in',
-                    'Host': 'classx.co.in'
+                    'Origin': 'https://test.classx.co.in'
+                    
                 },
-                {
-                    'Referer': 'https://cloud-front.in/',
-                    'Origin': 'https://cloud-front.in',
-                    'Host': 'cloud-front.in'
-                },
-                {
-                    'Referer': 'https://appx.co.in/',
-                    'Origin': 'https://appx.co.in',
-                    'Host': 'appx.co.in'
-                },
+        
                 {
                     'Referer': 'https://static-db-v2.appx.co.in/',
-                    'Origin': 'https://static-db-v2.appx.co.in',
-                    'Host': 'static-db-v2.appx.co.in'
+                    'Origin': 'https://static-db-v2.appx.co.in'
+                   
                 },
                 {
-                    'Referer': 'https://teachx.in/',
-                    'Origin': 'https://teachx.in',
-                    'Host': 'teachx.in'
+                    'Referer': 'https://test.teachx.in/',
+                    'Origin': 'https://test.teachx.in'
+                    
                 }
             ]
 
