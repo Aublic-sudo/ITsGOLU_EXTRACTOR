@@ -512,7 +512,23 @@ async def process_appxwp(bot: Client, m: Message, user_id: int):
                 api = "https://" + api.replace("https://", "").replace("http://", "").rstrip("/")
                 selected_app_name = api
 
-            # === STEP 1: User se Token lo ===
+            
+                
+            headers = {
+                'User-Agent': 'okhttp/4.9.1',
+                'Accept-Encoding': 'gzip',
+                'client-service': 'Appx',
+                'auth-key': 'appxapi',
+                'user_app_category': '',
+                'language': 'en',
+                'device_type': 'ANDROID',
+                'Authorization': token,
+                'User-ID': userid,
+                'source': 'website',
+                'Referer': api + '/',
+                'Origin': api,
+                'Host': api.replace('https://', '').replace('http://', '').replace('/', '')
+            }
             await editable.edit(
                 "Send Authorization Token\n\n"
                 "Example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
@@ -525,103 +541,38 @@ async def process_appxwp(bot: Client, m: Message, user_id: int):
                     timeout=180
                 )
                 token = token_input.text.strip()
+                
+                try:
+                    # JWT ka second part payload hota hai
+                    payload = token.split('.')[1]
+                
+                    # base64 padding fix
+                    payload += '=' * (-len(payload) % 4)
+                
+                    decoded_payload = json.loads(
+                        base64.urlsafe_b64decode(payload).decode('utf-8')
+                    )
+                
+                    print(decoded_payload)
+                
+                    userid = str(
+                        decoded_payload.get("id") or
+                        decoded_payload.get("user_id") or
+                        decoded_payload.get("userid")
+                    )
+                
+                    print(userid)
+                
+                except Exception as e:
+                    print("Token decode error:", e)
                 await token_input.delete(True)
             except:
                 await editable.edit("Timeout! Token nahi bheja")
                 return
-
-            # === STEP 2: Token se User ID nikalo ===
-            try:
-                payload = token.split('.')[1]
-                payload += '=' * (-len(payload) % 4)
-                decoded_payload = json.loads(base64.urlsafe_b64decode(payload).decode('utf-8'))
-                
-                userid = str(
-                    decoded_payload.get("id") or
-                    decoded_payload.get("user_id") or
-                    decoded_payload.get("userid") or
-                    ""
-                )
-                
-                if not userid:
-                    await editable.edit("Invalid Token! User ID not found in token")
-                    return
-                    
-            except Exception as e:
-                await editable.edit(f"Invalid Token! User ID decode nahi hua\n\n{e}")
-                return
-
-            # === STEP 3: Header variants try karo ===
-            header_variants = [
-                {
-                    'Referer': 'https://player-strict.akamai.net.in/',
-                    'Origin': 'https://player-strict.akamai.net.in'
-                    
-                },
-                {
-                    'Referer': 'https://classx.co.in/',
-                    'Origin': 'https://test.classx.co.in'
-                    
-                },
-        
-                {
-                    'Referer': 'https://static-db-v2.appx.co.in/',
-                    'Origin': 'https://static-db-v2.appx.co.in'
-                   
-                },
-                {
-                    'Referer': 'https://test.teachx.in/',
-                    'Origin': 'https://test.teachx.in'
-                    
-                }
-            ]
-
-            base_headers = {
-                'User-Agent': 'okhttp/4.9.1',
-                'Accept-Encoding': 'gzip',
-                'client-service': 'Appx',
-                'auth-key': 'appxapi',
-                'user_app_category': '',
-                'language': 'en',
-                'device_type': 'ANDROID',
-                'Authorization': token,
-                'User-ID': userid,
-                'source': 'website'
-            }
-
-            res1 = None
-            res2 = None
-            working_headers = None
-
             await editable.edit("Fetching courses list...")
-
-            # Try different header variants
-            for extra in header_variants:
-                headers = base_headers.copy()
-                headers.update(extra)
-
-                try:
-                    res1 = await fetch_appx_html_to_json(session, f"{api}/get/courselist", headers)
-                    res2 = await fetch_appx_html_to_json(session, f"{api}/get/courselistnewv2", headers)
-
-                    if (
-                        (res1 and res1.get('status') == 200 and res1.get('data')) or
-                        (res2 and res2.get('status') == 200 and res2.get('data'))
-                    ):
-                        print(f"Working headers: {extra}")
-                        working_headers = extra
-                        break
-
-                except Exception as e:
-                    print(f"Header variant failed: {extra} -> {e}")
-
-            if not working_headers:
-                await editable.edit("Failed to fetch courses. Token might be invalid or app not supported.")
-                return
-
-            # Update headers with working variant
-            headers = base_headers.copy()
-            headers.update(working_headers)
+            
+            res1 = await fetch_appx_html_to_json(session, f"{api}/get/courselist", headers)
+            res2 = await fetch_appx_html_to_json(session, f"{api}/get/courselistnewv2", headers)
 
             courses1 = res1.get("data", []) if res1 and res1.get('status') == 200 else []
             total1 = res1.get("total", 0) if res1 and res1.get('status') == 200 else 0
@@ -649,7 +600,7 @@ async def process_appxwp(bot: Client, m: Message, user_id: int):
                         f"📱 <b>APP:</b> {selected_app_name}\n"
                         f"📚 <b>TOTAL COURSES:</b> {total}\n"
                         f"📅 <b>DATE:</b> {time_new} IST\n\n"
-                        f"<code>╾───• :𝐑𝐈𝐗.™®: •───╼</code>\n\n"
+                        f"<code>╾───• :𝐈𝐓'𝐬𝐆𝐎𝐋𝐔.™®: •───╼</code>\n\n"
                         "Send the index number to download course"
                     )
                                 
@@ -705,7 +656,6 @@ async def process_appxwp(bot: Client, m: Message, user_id: int):
                 
                 start_time = time.time()
                 
-                # Second headers block with working variant
                 headers = {
                     "Client-Service": "Appx",
                     "Auth-Key": "appxapi",
@@ -713,7 +663,6 @@ async def process_appxwp(bot: Client, m: Message, user_id: int):
                     "Authorization": token,
                     "User-ID": userid
                 }
-                headers.update(working_headers)
 
                 all_outputs = []
 
@@ -848,3 +797,6 @@ async def appxwp_callback(client, callback_query):
             await callback_query.message.reply_text(f"Error: {str(e)}")
         except:
             pass
+
+
+                        
