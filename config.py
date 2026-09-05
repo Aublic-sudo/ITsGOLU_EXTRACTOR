@@ -15,14 +15,14 @@ BOT_TEXT = "𝙂𝙃𝙊𝙎𝙏•𝙍𝙄𝙓"
 OWNER_ID = int(os.environ.get("OWNER_ID", ""))
 # ------------------------------------------------
 # //LOG CHANNEL ID 
-CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1003675139654"))
+CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1004329496669"))
 
 # //FORCE_CHANNEL_ID
-CHANNEL_ID2 = int(os.environ.get("CHANNEL_ID2", "-1003675139654")) 
+CHANNEL_ID2 = int(os.environ.get("CHANNEL_ID2", "-1004329496669")) 
 # ------------------------------------------------
 MONGO_URL = os.environ.get("MONGO_URL", "")
 # -----------------------------------------------
-PREMIUM_LOGS = int(os.environ.get("PREMIUM_LOGS", "-1003675139654"))
+PREMIUM_LOGS = int(os.environ.get("PREMIUM_LOGS", "-1004329496669"))
 # -----------------------------------------------
 join = '<a href="">✳️ JOIN BACKUP</a>'
 # -----------------------------------------------
