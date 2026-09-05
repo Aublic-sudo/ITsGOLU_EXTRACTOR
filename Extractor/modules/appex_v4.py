@@ -17,6 +17,8 @@ from base64 import b64decode
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
 import time 
+import re
+import random
 from config import PREMIUM_LOGS, join
 from datetime import datetime
 import pytz
@@ -46,19 +48,58 @@ def decode_base64(encoded_str):
         return decoded_str
     except Exception as e:
         return f"Error decoding string: {e}"
-async def fetch(session, url, headers):
-    try:
-        async with session.get(url, headers=headers) as response:
-            if response.status != 200:
-                print(f"Error fetching {url}: {response.status}")
-                return {}
-            content = await response.text()
-            
-            soup = BeautifulSoup(content, 'html.parser')
-            return json.loads(str(soup))
-    except Exception as e:
-        print(f"An error occurred while fetching {url}: {str(e)}")
-        return {}
+_APPEX_SEMAPHORE = asyncio.Semaphore(4)
+
+async def fetch(session, url, headers, max_retries=5):
+    """Fetch JSON with rate-limiting semaphore and 429 retry backoff."""
+    for attempt in range(max_retries):
+        try:
+            async with _APPEX_SEMAPHORE:
+                await asyncio.sleep(0.08)
+                async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=30)) as response:
+                    if response.status == 429:
+                        retry_after = response.headers.get("Retry-After")
+                        if retry_after and retry_after.strip().isdigit():
+                            wait_time = float(retry_after.strip())
+                        else:
+                            wait_time = min((2 ** (attempt + 1)) + random.uniform(0.5, 1.5), 15.0)
+                        print(f"Rate limited (429) on {url}. Retrying in {wait_time:.1f}s (Attempt {attempt + 1}/{max_retries})...")
+                        await asyncio.sleep(wait_time)
+                        continue
+
+                    if response.status in (500, 502, 503, 504):
+                        wait_time = min((2 ** attempt) + 1.0, 10.0)
+                        print(f"Server error ({response.status}) on {url}. Retrying in {wait_time:.1f}s...")
+                        await asyncio.sleep(wait_time)
+                        continue
+
+                    if response.status != 200:
+                        print(f"Error fetching {url}: {response.status}")
+                        return {}
+
+                    content = await response.text()
+                    try:
+                        return json.loads(content)
+                    except Exception:
+                        soup = BeautifulSoup(content, 'html.parser')
+                        try:
+                            return json.loads(str(soup))
+                        except Exception:
+                            match = re.search(r'\{.*\}', content, re.DOTALL)
+                            if match:
+                                try:
+                                    return json.loads(match.group(0))
+                                except Exception:
+                                    pass
+                            return {}
+        except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+            wait_time = min((2 ** attempt) + 1.0, 10.0)
+            print(f"Network error on {url}: {str(e)}. Retrying in {wait_time:.1f}s...")
+            await asyncio.sleep(wait_time)
+        except Exception as e:
+            print(f"An error occurred while fetching {url}: {str(e)}")
+            return {}
+    return {}
 
 
 async def handle_course(session, api_base, bi, si, sn, topic, hdr1):
@@ -69,11 +110,15 @@ async def handle_course(session, api_base, bi, si, sn, topic, hdr1):
     r3 = await fetch(session, url, hdr1)
     video_data = sorted(r3.get("data", []), key=lambda x: x.get("id"))  
 
-    
     tasks = [process_video(session, api_base, bi, si, sn, ti, tn, video, hdr1) for video in video_data]
     results = await asyncio.gather(*tasks)
     
-    return [line for lines in results if lines for line in lines]
+    collected = [line for lines in results if lines for line in lines]
+    if collected:
+        breadcrumb = f"{sn} » {tn}"
+        header = f"\n📁 {breadcrumb}\n" + "─" * min(max(len(breadcrumb) + 4, 30), 60) + "\n"
+        return [header] + collected
+    return []
 
 async def process_video(session, api_base, bi, si, sn, ti, tn, video, hdr1):
     vi = video.get("id")
@@ -87,22 +132,35 @@ async def process_video(session, api_base, bi, si, sn, ti, tn, video, hdr1):
             print(f"Skipping video ID {vi}: No data found.")
             return None
 
-        vt = r4.get("data", {}).get("Title", "")
-        vl = r4.get("data", {}).get("download_link", "")
-        fl = r4.get("data", {}).get("video_id", "")
+        data = r4.get("data", {})
+        vt = data.get("Title", "") or vn or "Untitled"
+        vl = data.get("download_link", "")
+        fl = data.get("video_id", "")
+
+        # Clean any leading emoji from vt
+        clean_vt = vt
+        for emo in ["🎥", "🎬", "📄", "📕", "🖼️", "🖼", "📝", "📁", "🔗"]:
+            if clean_vt.startswith(emo):
+                clean_vt = clean_vt[len(emo):].strip()
         
         if fl:
             dfl = decrypt(fl)
-            final_link = f"https://youtu.be/{dfl}"
-            lines.append(f"{vt}:{final_link}\n")
+            if dfl:
+                final_link = f"https://youtu.be/{dfl}"
+                lines.append(f"🎥 {clean_vt}:{final_link}\n")
 
         if vl:
             dvl = decrypt(vl)
-            if ".pdf" not in dvl: 
-                lines.append(f"{vt}:{dvl}\n")
+            if dvl:
+                if ".pdf" in dvl.lower(): 
+                    lines.append(f"📄 {clean_vt}:{dvl}\n")
+                elif any(ext in dvl.lower() for ext in ['.png', '.jpg', '.jpeg', '.webp']):
+                    lines.append(f"🖼️ {clean_vt}:{dvl}\n")
+                else:
+                    lines.append(f"🎥 {clean_vt}:{dvl}\n")
                  
         else:
-            encrypted_links = r4.get("data", {}).get("encrypted_links", [])
+            encrypted_links = data.get("encrypted_links", [])
             if encrypted_links:
                 first_link = encrypted_links[0]
                 a = first_link.get("path")
@@ -111,63 +169,37 @@ async def process_video(session, api_base, bi, si, sn, ti, tn, video, hdr1):
                     da = decrypt(a)
                     k1 = decrypt(k)
                     k2 = decode_base64(k1)
-                    lines.append(f"{vt}:{da}*{k2}\n")
+                    if da and k2:
+                        lines.append(f"🎥 {clean_vt}:{da}*{k2}\n")
                 elif a:
                     da = decrypt(a)
-                    lines.append(f"{vt}:{da}\n")
+                    if da:
+                        lines.append(f"🎥 {clean_vt}:{da}\n")
         
-        if "material_type" in r4.get("data", {}):
-            mt = r4["data"]["material_type"]
-            if mt == "PDF":
-                p1 = r4["data"].get("pdf_link", "")
-                pk1 = r4["data"].get("pdf_encryption_key", "")
-                p2 = r4["data"].get("pdf_link2", "")
-                pk2 = r4["data"].get("pdf2_encryption_key", "")
-                
-                if p1 and pk1:
-                    dp1 = decrypt(p1)
-                    depk1 = decrypt(pk1)
-                    if depk1 == "abcdefg":
-                        lines.append(f"{vt}:{dp1}\n")
+        # Attach PDFs
+        for pdf_num in range(1, 3):
+            suffix = "" if pdf_num == 1 else str(pdf_num)
+            p = data.get(f"pdf_link{suffix}", "")
+            pk = data.get(f"pdf{'_' if pdf_num == 1 else str(pdf_num)}_encryption_key", "")
+            if p:
+                dp = decrypt(p)
+                if dp:
+                    notes_title = f"{clean_vt} (Notes {pdf_num})" if pdf_num > 1 else f"{clean_vt} (Notes)"
+                    if pk:
+                        depk = decrypt(pk)
+                        if depk and depk != "abcdefg":
+                            lines.append(f"📄 {notes_title}:{dp}*{depk}\n")
+                        else:
+                            lines.append(f"📄 {notes_title}:{dp}\n")
                     else:
-                        lines.append(f"{vt}:{dp1}*{depk1}\n")
-                if p2 and pk2:
-                    dp2 = decrypt(p2)
-                    depk2 = decrypt(pk2)
-                    if depk2 == "abcdefg":
-                        lines.append(f"{vt}:{dp2}\n")
-                    else:
-                        lines.append(f"{vt}:{dp2}*{depk2}\n")
-
-        
-        if "material_type" in r4.get("data", {}):
-            mt = r4["data"]["material_type"]
-            if mt == "VIDEO":
-                p1 = r4["data"].get("pdf_link", "")
-                pk1 = r4["data"].get("pdf_encryption_key", "")
-                p2 = r4["data"].get("pdf_link2", "")
-                pk2 = r4["data"].get("pdf2_encryption_key", "")
-                
-                if p1 and pk1:
-                    dp1 = decrypt(p1)
-                    depk1 = decrypt(pk1)
-                    if depk1 == "abcdefg":
-                        lines.append(f"{vt}:{dp1}\n")
-                    else:
-                        lines.append(f"{vt}:{dp1}*{depk1}\n")
-                if p2 and pk2:
-                    dp2 = decrypt(p2)
-                    depk2 = decrypt(pk2)
-                    if depk2 == "abcdefg":
-                        lines.append(f"{vt}:{dp2}\n")
-                    else:
-                        lines.append(f"{vt}:{dp2}*{depk2}\n")
+                        lines.append(f"📄 {notes_title}:{dp}\n")
                         
         return lines
     
     except Exception as e:
         print(f"An error occurred while processing video ID {vi}: {str(e)}")
         return None
+
 
             
             
@@ -284,18 +316,34 @@ async def appex_v5_txt(app, message, api, name):
             "source": "website",
             "Auth-Key": "appxapi",
             "Authorization": token,
-            "User-ID": "1234"
+            "User-ID": str(userid),
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
         }
         
     else:
-        userid = "extracted_userid_from_token"
-        token = raw_text
+        token = raw_text.strip()
+        userid = ""
+        try:
+            # Decode JWT payload to get user ID
+            parts = token.split(".")
+            if len(parts) >= 2:
+                payload_b64 = parts[1]
+                payload_b64 += "=" * (-len(payload_b64) % 4)
+                payload = json.loads(base64.urlsafe_b64decode(payload_b64))
+                userid = str(payload.get("id", ""))
+        except Exception:
+            pass
+
+        if not userid:
+            userid = "-2"
+
         hdr1 = {
             "Client-Service": "Appx",
             "source": "website",
             "Auth-Key": "appxapi",
             "Authorization": token,
-            "User-ID": userid
+            "User-ID": str(userid),
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
         }  
         
     scraper = cloudscraper.create_scraper() 
@@ -348,7 +396,7 @@ async def appex_v5_txt(app, message, api, name):
         editable1 = await message.reply_text(success_msg)
     else:
         file_path = f"{app_name}_batches.txt"
-        with open(file_path, "w") as file:
+        with open(file_path, "w", encoding='utf-8') as file:
             file.write(f"{success_msg}\n\nToken: {token}")
 
         await app.send_document(
@@ -432,7 +480,7 @@ async def appex_v5_txt(app, message, api, name):
                     filename1 = filename
                 
                 async with aiohttp.ClientSession() as session:
-                    with open(filename1, 'w') as f:
+                    with open(filename1, 'w', encoding='utf-8') as f:
                         try:
                             r1 = await fetch(session, f"{api_base}/get/allsubjectfrmlivecourseclass?courseid={raw_text2}&start=-1", hdr1)
                 
